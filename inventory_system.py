@@ -121,11 +121,15 @@ def equip_armor(character, item_id, item_data):
         raise InvalidItemTypeError("Item is not armor.")
 
     # Unequip previous armor
-    if character.get("equipped_armor"):
-        prev_id = character["equipped_armor"]
-        prev_data = character["all_items"][prev_id]
-        stat, val = parse_item_effect(prev_data["effect"])
-        apply_stat_effect(character, stat, -val)
+    if character.get("equipped_weapon"):
+        prev_id = character["equipped_weapon"]
+        all_items = character.get("all_items", {})  # ensure all_items exists
+        prev_data = all_items.get(prev_id)  # safely get the previous weapon
+        if prev_data:  # only proceed if the item exists
+            stat, val = parse_item_effect(prev_data["effect"])
+            apply_stat_effect(character, stat, -val)
+        else:
+            print(f"Warning: Equipped weapon ID '{prev_id}' not found in all_items.")
 
         if len(character["inventory"]) >= MAX_INVENTORY_SIZE:
             raise InventoryFullError("Cannot unequip: Inventory full.")
@@ -147,15 +151,26 @@ def unequip_weapon(character):
     if not weapon_id:
         return None
 
-    if len(character["inventory"]) >= MAX_INVENTORY_SIZE:
+    inventory = character.setdefault("inventory", [])
+
+    if len(inventory) >= MAX_INVENTORY_SIZE:
         raise InventoryFullError("Inventory full.")
 
-    weapon_data = character["all_items"][weapon_id]
-    stat, val = parse_item_effect(weapon_data["effect"])
+    # Safely get weapon data
+    all_items = character.get("all_items", {})
+    weapon_data = all_items.get(weapon_id)
+    if not weapon_data:
+        raise ValueError(f"Weapon ID '{weapon_id}' not found in all_items.")
 
+    # Remove weapon's stat effects
+    stat, val = parse_item_effect(weapon_data["effect"])
     apply_stat_effect(character, stat, -val)
 
-    character["inventory"].append(weapon_id)
+    # Add weapon back to inventory
+    if weapon_id not in inventory:
+        inventory.append(weapon_id)
+
+    # Unequip weapon
     character["equipped_weapon"] = None
 
     return weapon_id
