@@ -24,7 +24,7 @@ from custom_exceptions import (
 
 class InvalidCharacterClassError(Exception):
     """Raised when an invalid character class is provided."""
-    pass
+
 
 
 def create_character(name, character_class):
@@ -100,17 +100,17 @@ def save_character(character, save_directory="data/save_games"):
 # TODO: Exceptions for loading characters
 class CharacterNotFoundError(Exception):
     """Raised when the save file is missing."""
-    pass
+
 
 
 class SaveFileCorruptedError(Exception):
     """Raised when the save file exists but can't be read."""
-    pass
+
 
 
 class InvalidSaveDataError(Exception):
     """Raised when the save data is incorrectly formatted."""
-    pass
+
 
 
 def load_character(character_name, save_directory="data/save_games"):
@@ -200,7 +200,7 @@ def delete_character(character_name, save_directory="data/save_games"):
 # TODO: Exception for dead characters
 class CharacterDeadError(Exception):
     """Raised when trying to operate on a dead character."""
-    pass
+
 
 
 def gain_experience(character, xp_amount):
