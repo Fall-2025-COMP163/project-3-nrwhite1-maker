@@ -266,6 +266,24 @@ def validate_character_data(character):
             raise InvalidSaveDataError(f"Field {field} must be a list.")
 
     return True
+__all__ = [
+    "InvalidCharacterClassError",
+    "CharacterNotFoundError",
+    "SaveFileCorruptedError",
+    "InvalidSaveDataError",
+    "CharacterDeadError",
+    "create_character",
+    "load_character",
+    "save_character",
+    "list_saved_characters",
+    "delete_character",
+    "gain_experience",
+    "add_gold",
+    "heal_character",
+    "is_character_dead",
+    "revive_character",
+    "validate_character_data"
+]
 
 if __name__ == "__main__":
     print("=== CHARACTER MANAGER TEST ===")
