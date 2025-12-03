@@ -48,6 +48,24 @@ def get_random_enemy_for_level(character_level):
         enemy_type = "dragon"
     return create_enemy(enemy_type)
 
+# ============================================================================
+# EXPERIENCE AND GOLD FUNCTIONS
+# ============================================================================
+
+def gain_experience(character, xp):
+    character["experience"] += xp
+    display_battle_log(f"{character['name']} gained {xp} XP!")
+    # Simple level up logic
+    while character["experience"] >= 100:
+        character["experience"] -= 100
+        character["level"] += 1
+        character["max_health"] += 10
+        character["health"] = character["max_health"]
+        display_battle_log(f"{character['name']} leveled up to {character['level']}!")
+
+def add_gold(character, gold):
+    character["gold"] += gold
+    display_battle_log(f"{character['name']} received {gold} gold!")
 
 # ============================================================================
 # COMBAT SYSTEM
@@ -134,7 +152,6 @@ class SimpleBattle:
             display_battle_log(f"{self.character['name']} failed to escape.")
             return False
 
-
 # ============================================================================
 # SPECIAL ABILITIES
 # ============================================================================
@@ -181,7 +198,6 @@ def cleric_heal(character):
     character["health"] += heal_amount
     return f"{character['name']} heals for {heal_amount} HP."
 
-
 # ============================================================================
 # COMBAT UTILITIES
 # ============================================================================
@@ -189,15 +205,12 @@ def cleric_heal(character):
 def can_character_fight(character):
     return character["health"] > 0
 
-
 def get_victory_rewards(enemy):
     return {"xp": enemy["xp_reward"], "gold": enemy["gold_reward"]}
-
 
 def display_combat_stats(character, enemy):
     print(f"\n{character['name']}: HP={character['health']}/{character['max_health']}")
     print(f"{enemy['name']}: HP={enemy['health']}/{enemy['max_health']}")
-
 
 def display_battle_log(message):
     print(f">>> {message}")
